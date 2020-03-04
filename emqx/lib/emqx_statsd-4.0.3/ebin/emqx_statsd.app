@@ -1,0 +1,12 @@
+{application,emqx_statsd,
+             [{description,"Statsd for EMQ X"},
+              {vsn,"4.0.3"},
+              {modules,[emqx_statsd,emqx_statsd_app,emqx_statsd_sup]},
+              {registered,[emqx_statsd_sup]},
+              {applications,[kernel,stdlib,prometheus]},
+              {mod,{emqx_statsd_app,[]}},
+              {env,[]},
+              {licenses,["Apache-2.0"]},
+              {maintainers,["EMQ X Team <contact@emqx.io>"]},
+              {links,[{"Homepage","https://emqx.io/"},
+                      {"Github","https://github.com/emqx/emqx-statsd"}]}]}.

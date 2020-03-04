@@ -79,6 +79,21 @@ services:
           - /var/run/docker.sock:/var/run/docker.sock
           - ./portainer_data:/data
 
+
+    emqx:
+        image: emqx_iotify
+        container_name: emqx
+        volumes:
+            - ./emqx/lib:/emqx/lib
+            - ./emqx/etc:/emqx/etc
+            - ./emqx/data:/emqx/data
+            - ./emqx/log:/emqx/log
+        ports:
+            - 18083:18083
+            - 1883:1883
+            - 8083:8083
+            - 8084:8084
+
   #  netdata:
   #      image: netdata/netdata
   #      container_name: netdata
