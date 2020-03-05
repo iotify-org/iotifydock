@@ -111,6 +111,7 @@ echo "EMQX_DASH_PASS=$emqx_dash_password" >> ./.env
 
 #GENERATING SSL CERTS
 docker-compose -f certbot.yml up
+docker rm $(docker ps -a -q) -f
 
 #SETTING UP EMQX DASHBOARD CREDENTIALS
 sed -i "8s/.*/dashboard.default_user.login = $emqx_dash_user/" ./emqx/etc/plugins/emqx_dashboard.conf
