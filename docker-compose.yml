@@ -81,7 +81,7 @@ services:
 
 
     emqx:
-        image: emqx_iotify
+        image: iotify/mqtt
         container_name: emqx
         volumes:
             - ./emqx/lib:/emqx/lib
