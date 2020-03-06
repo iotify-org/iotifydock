@@ -110,8 +110,8 @@ echo "EMQX_DASH_USER=$emqx_dash_user" >> ./.env
 echo "EMQX_DASH_PASS=$emqx_dash_password" >> ./.env
 
 #GENERATING SSL CERTS
-docker-compose -f certbot.yml up
-docker rm $(docker ps -a -q) -f
+#docker-compose -f certbot.yml up
+#docker rm $(docker ps -a -q) -f
 
 #SETTING UP EMQX DASHBOARD CREDENTIALS
 sed -i "8s/.*/dashboard.default_user.login = $emqx_dash_user/" ./emqx/etc/plugins/emqx_dashboard.conf
@@ -139,9 +139,9 @@ sed -i "25s/.*/auth.mysql.password = $mysql_admin_password/" ./emqx/etc/plugins/
 sed -i "35s/.*/auth.mysql.query_timeout = 15s/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 sed -i "96s/.*/auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_user_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c' ORDER BY id ASC/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 
-rm ./emqx/etc/certs/cert.pem
-rm ./emqx/etc/certs/key.pem
-
-ln -s ./user-data/etc/letsencrypt/live/$domain/cert.pem ./emqx/etc/certs/cert.pem
-ln -s ./user-data/etc/letsencrypt/live/$privkey/key.pem ./emqx/etc/certs/key.pem
+#rm ./emqx/etc/certs/cert.pem
+#rm ./emqx/etc/certs/key.pem
+#
+#ln -s ./user-data/etc/letsencrypt/live/$domain/cert.pem ./emqx/etc/certs/cert.pem
+#ln -s ./user-data/etc/letsencrypt/live/$privkey/key.pem ./emqx/etc/certs/key.pem
 
