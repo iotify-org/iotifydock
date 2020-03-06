@@ -2,3 +2,6 @@
 user-data*
 /build/iotify/src
 influxdb2*
+netdata/
+portrainer_data/
+
