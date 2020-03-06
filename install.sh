@@ -82,9 +82,6 @@ do
 done
 
 
-
-
-
 echo "TIMEZONE=$timezone" > ./.env
 
 echo "" >> ./.env
@@ -110,8 +107,8 @@ echo "EMQX_DASH_USER=$emqx_dash_user" >> ./.env
 echo "EMQX_DASH_PASS=$emqx_dash_password" >> ./.env
 
 #GENERATING SSL CERTS
-docker-compose -f certbot.yml up
-docker rm $(docker ps -a -q) -f
+#docker-compose -f certbot.yml up
+#docker rm $(docker ps -a -q) -f
 
 unzip emqx.zip
 

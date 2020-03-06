@@ -111,8 +111,6 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
     
 
-    
-
     certbot:
         container_name: certbot
         image: cnsoluciones/certbot:latest

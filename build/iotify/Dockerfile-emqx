@@ -1,0 +1,28 @@
+#FROM ubuntu:18.04
+FROM ubuntu:18.04
+
+#UPDATE REPOSITORIES LISTS
+RUN apt-get update
+
+#INSTALL WGET
+RUN apt-get install wget -y
+
+#INSTALL UNZIP
+RUN apt-get install unzip
+
+#DOWNLOAD EMQX V 4.0.3
+RUN wget https://www.emqx.io/downloads/broker/v4.0.3/emqx-ubuntu18.04-v4.0.3.zip
+
+#UNZIP EMQZ ZIP
+RUN unzip emqx-ubuntu18.04-v4.0.3.zip
+
+#REMOVE ZIP FILE
+RUN rm emqx-ubuntu18.04-v4.0.3.zip
+
+#DELETE LISTS
+RUN rm -r /var/lib/apt/lists/*
+
+#ENTRY POINT
+COPY ./init.sh init.sh
+CMD chmod 777 init.sh
+CMD ./init.sh
