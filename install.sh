@@ -109,18 +109,9 @@ sleep 3
 
 
 apt-get update
-apt dist-upgrade -y
 
-tput setaf 2;
-echo ""
-echo "******************************"
-echo "**** INSTALLING FAIL2BAN *****"
-echo "******************************"
-echo ""
-tput setaf 7;
-sleep 3
 
-apt install fail2ban -y
+
 
 tput setaf 2;
 echo ""
@@ -208,8 +199,9 @@ tput setaf 7;
 sleep 3
 
 #GENERATING SSL CERTS
-docker-compose -f certbot.yml up
 docker rm $(docker ps -a -q) -f
+docker-compose -f certbot.yml up
+
 
 tput setaf 2;
 echo ""
@@ -253,7 +245,8 @@ sed -i "20s/.*/auth.mysql.username = $mysql_admin_user/" ./emqx/etc/plugins/emqx
 sed -i "25s/.*/auth.mysql.password = $mysql_admin_password/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 sed -i "30s/.*/auth.mysql.database = $mysql_database_name/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 sed -i "35s/.*/auth.mysql.query_timeout = 15s/" ./emqx/etc/plugins/emqx_auth_mysql.conf
-sed -i "96s/.*/auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_user_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c' ORDER BY id ASC/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sed -i "59s/.*/auth.mysql.password_hash = plain/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sed -i "96s/.*/auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_user_acl where ipaddr = '%a' or username = '%u'  or clientid = '%c' ORDER BY id ASC/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 
 #SETTING UP DEFAULT EMQX PLUGINS 
 echo '{emqx_auth_mysql,true}.' >> ./emqx/data/loaded_plugins
@@ -263,15 +256,15 @@ echo ""
 echo "**********************************"
 echo "****   INSTALLING MQTT SSL   *****"
 echo "**********************************"
-echo ""
+echo "" 
 tput setaf 7;
 sleep 3
 
-rm ./emqx/etc/certs/cert.pem
-rm ./emqx/etc/certs/key.pem
+sed -i "1178s/.*/listener.ssl.external.keyfile = /emqx/letsencrypt/live/certificate/privkey.pem/" ./emqx/etc/emqx.conf
+sed -i "1185s/.*/listener.ssl.external.certfile = /emqx/letsencrypt/live/certificate/cert.pem/" ./emqx/etc/emqx.conf
+sed -i "1651s/.*/listener.wss.external.keyfile = /emqx/letsencrypt/live/certificate/privkey.pem/" ./emqx/etc/emqx.conf
+sed -i "1658s/.*/listener.wss.external.certfile = /emqx/letsencrypt/live/certificate/cert.pem/" ./emqx/etc/emqx.conf
 
-ln -s ./user-data/etc/letsencrypt/live/$domain/cert.pem ./emqx/etc/certs/cert.pem
-ln -s ./user-data/etc/letsencrypt/live/$privkey/key.pem ./emqx/etc/certs/key.pem
 
 tput setaf 2;
 echo ""
@@ -281,7 +274,7 @@ echo "**********************************"
 echo ""
 tput setaf 7;
 sleep 3
-
+docker rm $(docker ps -a -q) -f
 docker-compose up -d
 
 tput setaf 2;
@@ -292,4 +285,4 @@ echo "**********************************"
 echo ""
 tput setaf 7;
 
-echo "Go to https://$domains that's all over here..."
+echo "Go to https://$domain that's all over here..."
