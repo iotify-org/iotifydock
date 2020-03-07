@@ -119,5 +119,18 @@ services:
         volumes:
             - ./user-data/etc/letsencrypt:/etc/letsencrypt
         entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+        
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=db
+        ports:
+            - "8050:80"
+        volumes:
+            - /sessions
+        links:
+            - db
 
 
