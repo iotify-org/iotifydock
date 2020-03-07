@@ -260,8 +260,8 @@ echo ""
 tput setaf 7;
 sleep 3
 
-sed -i "1178s/.*/listener.ssl.external.keyfile = \/emqx\/letsencrypt\/live/certificate\/privkey.pem/" ./emqx/etc/emqx.conf
-sed -i "1185s/.*/listener.ssl.external.certfile = \/emqx\/letsencrypt\/live/certificate\/cert.pem/" ./emqx/etc/emqx.conf
+sed -i "1178s/.*/listener.ssl.external.keyfile = \/emqx\/letsencrypt\/live\/certificate\/privkey.pem/" ./emqx/etc/emqx.conf
+sed -i "1185s/.*/listener.ssl.external.certfile = \/emqx\/letsencrypt\/live\/certificate\/cert.pem/" ./emqx/etc/emqx.conf
 sed -i "1651s/.*/listener.wss.external.keyfile = \/emqx\/letsencrypt\/live\/certificate\/privkey.pem/" ./emqx/etc/emqx.conf
 sed -i "1658s/.*/listener.wss.external.certfile = \/emqx\/letsencrypt\/live\/certificate\/cert.pem/" ./emqx/etc/emqx.conf
 
