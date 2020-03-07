@@ -21,3 +21,20 @@ CREATE TABLE `mqtt_acl` (
   `clientid` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=267 DEFAULT CHARSET=utf8;
+
+CREATE or REPLACE view `mqtt_user_acl`
+AS SELECT
+   `mqtt_user`.`id` AS `id`,
+   `mqtt_user`.`username` AS `username`,
+   `mqtt_user`.`password` AS `password`,
+   `mqtt_user`.`is_superuser` AS `is_superuser`,
+   `mqtt_user`.`created` AS `created`,
+   `mqtt_user`.`user_id` AS `user_id`,
+   `mqtt_user`.`device_id` AS `device_id`,
+   `mqtt_acl`.`allow` AS `allow`,
+   `mqtt_acl`.`access` AS `access`,
+   `mqtt_acl`.`topic` AS `topic`,
+   `mqtt_acl`.`mqtt_user_id` AS `mqtt_user_id`,
+   `mqtt_acl`.`ipaddr` AS `ipaddr`,
+   `mqtt_acl`.`clientid` AS `clientid`
+FROM (`mqtt_user` join `mqtt_acl` on((`mqtt_user`.`id` = `mqtt_acl`.`mqtt_user_id`)));
