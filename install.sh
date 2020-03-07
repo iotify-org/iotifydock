@@ -6,13 +6,12 @@
 ## ------------------------------------------------------------------
 clear
 msg="
-  _____     _____ _  __       
-  \_   \___/__   (_)/ _|_   _ 
+  _____     _____ _  __
+  \_   \___/__   (_)/ _|_   _
    / /\/ _ \ / /\/ | |_| | | |
 /\/ /_| (_) / /  | |  _| |_| |
 \____/ \___/\/   |_|_|  \__, |
-                        |___/ 
-
+                        |___/
 "
 tput setaf 4;
 echo "$msg"
@@ -109,6 +108,7 @@ sleep 3
 
 
 apt-get update
+apt install unzip -y
 
 
 
@@ -123,16 +123,12 @@ tput setaf 7;
 sleep 3
 
 #DOCKER
-apt-get install -y \
-    apt-transport-https \ 
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
+apt remove docker docker-engine docker.io containerd runc
+apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-apt-key fingerprint 0EBFCD88
-apt-get update.
-apt-get install docker-ce docker-ce-cli containerd.io -y
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+apt install docker-ce docker-ce-cli containerd.io -y
+
 docker run hello-world
 
 tput setaf 2;
@@ -145,7 +141,7 @@ tput setaf 7;
 sleep 3
 
 #DOCKER COMPOSE
-curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-$
+curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
@@ -248,7 +244,7 @@ sed -i "35s/.*/auth.mysql.query_timeout = 15s/" ./emqx/etc/plugins/emqx_auth_mys
 sed -i "59s/.*/auth.mysql.password_hash = plain/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 sed -i "96s/.*/auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_user_acl where ipaddr = '%a' or username = '%u'  or clientid = '%c' ORDER BY id ASC/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 
-#SETTING UP DEFAULT EMQX PLUGINS 
+#SETTING UP DEFAULT EMQX PLUGINS
 echo '{emqx_auth_mysql,true}.' >> ./emqx/data/loaded_plugins
 
 tput setaf 2;
@@ -256,7 +252,7 @@ echo ""
 echo "**********************************"
 echo "****   INSTALLING MQTT SSL   *****"
 echo "**********************************"
-echo "" 
+echo ""
 tput setaf 7;
 sleep 3
 
