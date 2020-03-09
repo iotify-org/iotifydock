@@ -95,8 +95,6 @@ emqx_api_secret=$(random_string)
 
 
 
-cd /
-
 tput setaf 2;
 echo ""
 echo "**************************"
@@ -107,13 +105,8 @@ tput setaf 7;
 sleep 3
 
 
-apt-get update
-apt install unzip -y
-
-
-
-
-
+# sudo apt-get update
+# sudo apt install unzip -y
 
 #DOCKER COMPOSE
 #curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
@@ -130,7 +123,7 @@ tput setaf 7;
 sleep 3
 
 #IOTIFY
-git clone https://github.com/iotify-org/iotifydock.git
+sudo git clone https://github.com/iotify-org/iotifydock.git
 cd iotifydock
 
 
@@ -170,8 +163,8 @@ tput setaf 7;
 sleep 3
 
 #GENERATING SSL CERTS
-docker rm $(docker ps -a -q) -f
-docker-compose -f certbot.yml up
+sudo docker rm $(docker ps -a -q) -f
+sudo docker-compose -f certbot.yml up
 
 
 tput setaf 2;
@@ -183,41 +176,41 @@ echo ""
 tput setaf 7;
 sleep 3
 
-unzip emqx.zip
+sudo unzip emqx.zip
 
 #SETTING UP EMQX DASHBOARD CREDENTIALS
-sed -i "8s/.*/dashboard.default_user.login = $emqx_dash_user/" ./emqx/etc/plugins/emqx_dashboard.conf
-sed -i "13s/.*/dashboard.default_user.password = $emqx_dash_password/" ./emqx/etc/plugins/emqx_dashboard.conf
+sudo sed -i "8s/.*/dashboard.default_user.login = $emqx_dash_user/" ./emqx/etc/plugins/emqx_dashboard.conf
+sudo sed -i "13s/.*/dashboard.default_user.password = $emqx_dash_password/" ./emqx/etc/plugins/emqx_dashboard.conf
 
 #SETTING UP ACL CONF
-sed -i "460s/.*/allow_anonymous = false/" ./emqx/etc/emqx.conf
-sed -i "465s/.*/acl_nomatch = deny/" ./emqx/etc/emqx.conf
+sudo sed -i "460s/.*/allow_anonymous = false/" ./emqx/etc/emqx.conf
+sudo sed -i "465s/.*/acl_nomatch = deny/" ./emqx/etc/emqx.conf
 
 #SETTING UP MQTT LISTENERS
-sed -i "880s/.*/listener.tcp.external.max_connections = 100/" ./emqx/etc/emqx.conf
-sed -i "885s/.*/listener.tcp.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
-sed -i "1011s/.*/listener.tcp.internal.max_connections = 100/" ./emqx/etc/emqx.conf
-sed -i "1121s/.*/listener.ssl.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
-sed -i "1116s/.*/listener.ssl.external.max_connections = 100/" ./emqx/etc/emqx.conf
-sed -i "1121s/.*/listener.ssl.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
-sed -i "1367s/.*/listener.ws.external.max_connections = 100/" ./emqx/etc/emqx.conf
-sed -i "1372s/.*/listener.ws.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
-sed -i "1578s/.*/listener.wss.external.max_connections = 100/" ./emqx/etc/emqx.conf
-sed -i "1585s/.*/listener.wss.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
+sudo sed -i "880s/.*/listener.tcp.external.max_connections = 100/" ./emqx/etc/emqx.conf
+sudo sed -i "885s/.*/listener.tcp.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
+sudo sed -i "1011s/.*/listener.tcp.internal.max_connections = 100/" ./emqx/etc/emqx.conf
+sudo sed -i "1121s/.*/listener.ssl.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
+sudo sed -i "1116s/.*/listener.ssl.external.max_connections = 100/" ./emqx/etc/emqx.conf
+sudo sed -i "1121s/.*/listener.ssl.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
+sudo sed -i "1367s/.*/listener.ws.external.max_connections = 100/" ./emqx/etc/emqx.conf
+sudo sed -i "1372s/.*/listener.ws.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
+sudo sed -i "1578s/.*/listener.wss.external.max_connections = 100/" ./emqx/etc/emqx.conf
+sudo sed -i "1585s/.*/listener.wss.external.max_conn_rate = 25/" ./emqx/etc/emqx.conf
 
 #SETTING UP MAIN EMQX API CREDENTIALS
-sed -i "16s/.*/management.default_application.id = $emqx_api_id/" ./emqx/etc/plugins/emqx_management.conf
-sed -i "21s/.*/management.default_application.secret = $emqx_api_secret/" ./emqx/etc/plugins/emqx_management.conf
+sudo sed -i "16s/.*/management.default_application.id = $emqx_api_id/" ./emqx/etc/plugins/emqx_management.conf
+sudo sed -i "21s/.*/management.default_application.secret = $emqx_api_secret/" ./emqx/etc/plugins/emqx_management.conf
 
 
 #SETTING UP EMQX AUTH MYSQL
-sed -i "10s/.*/auth.mysql.server = db:3306/" ./emqx/etc/plugins/emqx_auth_mysql.conf
-sed -i "20s/.*/auth.mysql.username = $mysql_admin_user/" ./emqx/etc/plugins/emqx_auth_mysql.conf
-sed -i "25s/.*/auth.mysql.password = $mysql_admin_password/" ./emqx/etc/plugins/emqx_auth_mysql.conf
-sed -i "30s/.*/auth.mysql.database = $mysql_database_name/" ./emqx/etc/plugins/emqx_auth_mysql.conf
-sed -i "35s/.*/auth.mysql.query_timeout = 15s/" ./emqx/etc/plugins/emqx_auth_mysql.conf
-sed -i "59s/.*/auth.mysql.password_hash = plain/" ./emqx/etc/plugins/emqx_auth_mysql.conf
-sed -i "96s/.*/auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_user_acl where ipaddr = '%a' or username = '%u'  or clientid = '%c' ORDER BY id ASC/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sudo sed -i "10s/.*/auth.mysql.server = db:3306/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sudo sed -i "20s/.*/auth.mysql.username = $mysql_admin_user/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sudo sed -i "25s/.*/auth.mysql.password = $mysql_admin_password/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sudo sed -i "30s/.*/auth.mysql.database = $mysql_database_name/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sudo sed -i "35s/.*/auth.mysql.query_timeout = 15s/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sudo sed -i "59s/.*/auth.mysql.password_hash = plain/" ./emqx/etc/plugins/emqx_auth_mysql.conf
+sudo sed -i "96s/.*/auth.mysql.acl_query = select allow, ipaddr, username, clientid, access, topic from mqtt_user_acl where ipaddr = '%a' or username = '%u'  or clientid = '%c' ORDER BY id ASC/" ./emqx/etc/plugins/emqx_auth_mysql.conf
 
 #SETTING UP DEFAULT EMQX PLUGINS
 echo '{emqx_auth_mysql,true}.' >> ./emqx/data/loaded_plugins
@@ -231,10 +224,10 @@ echo ""
 tput setaf 7;
 sleep 3
 
-sed -i "1178s/.*/listener.ssl.external.keyfile = \/emqx\/letsencrypt\/live\/certificate\/privkey.pem/" ./emqx/etc/emqx.conf
-sed -i "1185s/.*/listener.ssl.external.certfile = \/emqx\/letsencrypt\/live\/certificate\/cert.pem/" ./emqx/etc/emqx.conf
-sed -i "1651s/.*/listener.wss.external.keyfile = \/emqx\/letsencrypt\/live\/certificate\/privkey.pem/" ./emqx/etc/emqx.conf
-sed -i "1658s/.*/listener.wss.external.certfile = \/emqx\/letsencrypt\/live\/certificate\/cert.pem/" ./emqx/etc/emqx.conf
+sudo sed -i "1178s/.*/listener.ssl.external.keyfile = \/emqx\/letsencrypt\/live\/certificate\/privkey.pem/" ./emqx/etc/emqx.conf
+sudo sed -i "1185s/.*/listener.ssl.external.certfile = \/emqx\/letsencrypt\/live\/certificate\/cert.pem/" ./emqx/etc/emqx.conf
+sudo sed -i "1651s/.*/listener.wss.external.keyfile = \/emqx\/letsencrypt\/live\/certificate\/privkey.pem/" ./emqx/etc/emqx.conf
+sudo sed -i "1658s/.*/listener.wss.external.certfile = \/emqx\/letsencrypt\/live\/certificate\/cert.pem/" ./emqx/etc/emqx.conf
 
 
 tput setaf 2;
@@ -245,8 +238,8 @@ echo "**********************************"
 echo ""
 tput setaf 7;
 sleep 3
-docker rm $(docker ps -a -q) -f
-docker-compose up -d
+sudo docker rm $(docker ps -a -q) -f
+sudo docker-compose up -d
 
 tput setaf 2;
 echo ""
