@@ -113,37 +113,12 @@ apt install unzip -y
 
 
 
-tput setaf 2;
-echo ""
-echo "******************************"
-echo "**** INSTALLING DOCKER *****"
-echo "******************************"
-echo ""
-tput setaf 7;
-sleep 3
 
-#DOCKER
-apt remove docker docker-engine docker.io containerd runc
-apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-apt install docker-ce docker-ce-cli containerd.io -y
-
-docker run hello-world
-
-tput setaf 2;
-echo ""
-echo "************************************"
-echo "**** INSTALLING DOCKER-COMPOSE *****"
-echo "************************************"
-echo ""
-tput setaf 7;
-sleep 3
 
 #DOCKER COMPOSE
-curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-docker-compose --version
+#curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+#chmod +x /usr/local/bin/docker-compose
+#docker-compose --version
 
 tput setaf 2;
 echo ""
